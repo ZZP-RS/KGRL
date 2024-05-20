@@ -3,7 +3,7 @@ KGRL is a niche KG-enhanced Representation Learning for long tail recommendation
 
 ## Author
 Yao Zhang; Zhipeng Zhang; Mingwei Wang; Xiujun Zhao; Shu Li; Wenchao Zhang
-{School of Mechanical Engineering and Automation, Dalian Polytechnic University, Dalian, China}
+{School of Mechanical Engineering and Automation, Dalian Polytechnic University, Dalian, China,}
 {School of Computer Science and Artificial Intelligence, Liaoning Normal University, Dalian, China}
 
 ## Environment Requirement
