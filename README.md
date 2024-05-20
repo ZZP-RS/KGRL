@@ -1,9 +1,17 @@
 ## Introduction
-KGRL is a niche KG-enhanced Representation Learning for long tail recommendations. KGRL mainly contains the components as follows: 1) Long-tail interest representation learning on the user side. This module leverages semantic-based correlations in KG to make the long-tail neighbors selection for the target user, and utilizes a hybrid attention network to aggregate the features of both long-tail neighbors and original neighbors into the embeddings of the target user. 2) Co-occurrence representation learning on the item side. This module makes co-occurrence neighbor selection to extract the co-occurrence neighbors for long-tail items, and further employs a hybrid attention network to aggregate the features of both co-occurrence neighbors and original neighbors into the embeddings of long-tail items. 3) Model prediction and multi-task optimization. This module employs layer-aggregation to concatenate embeddings from each step into a single vector, and utilizes a multi-task training strategy to train the parameters of KGRL until optimal.
+KGRL is a niche KG-enhanced Representation Learning for long tail recommendations. KGRL mainly contains the components as follows: 
+
+1) Long-tail interest representation learning on the user side. This module leverages semantic-based correlations in KG to make the long-tail neighbors selection for the target user, and utilizes a hybrid attention network to aggregate the features of both long-tail neighbors and original neighbors into the embeddings of the target user.
+   
+2) Co-occurrence representation learning on the item side. This module makes co-occurrence neighbor selection to extract the co-occurrence neighbors for long-tail items, and further employs a hybrid attention network to aggregate the features of both co-occurrence neighbors and original neighbors into the embeddings of long-tail items.
+
+3) Model prediction and multi-task optimization. This module employs layer-aggregation to concatenate embeddings from each step into a single vector, and utilizes a multi-task training strategy to train the parameters of KGRL until optimal.
 
 ## Author
 Yao Zhang; Zhipeng Zhang; Mingwei Wang; Xiujun Zhao; Shu Li; Wenchao Zhang
-{School of Mechanical Engineering and Automation, Dalian Polytechnic University, Dalian, China,}
+
+{School of Mechanical Engineering and Automation, Dalian Polytechnic University, Dalian, China}
+
 {School of Computer Science and Artificial Intelligence, Liaoning Normal University, Dalian, China}
 
 ## Environment Requirement
