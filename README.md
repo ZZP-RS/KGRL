@@ -1,9 +1,6 @@
 ## Introduction
 KGRL focuses on long tail recommendations by utilizing KG-enhanced representation learning.
 
-## Author
-Yao Zhang; Zhipeng Zhang; Mingwei Wang; Xiujun Zhao; Shu Li; Wenchao Zhang
-
 ## Environment Requirement
 The code has been tested running under Python 3.7.10. The required packages are as follows:
 * torch == 1.8.0
