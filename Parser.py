@@ -8,7 +8,7 @@ def parse_args():
 
     # nargs=?，如果没有在命令行中出现对应的项，则给对应的项赋值为default。
     parser.add_argument("--dataset", nargs="?", default="ml-1m",
-                        help="choose a dataset from {last-fm, ml-1m}")
+                        help="choose a dataset from {last-fm,ml-1m}")
     parser.add_argument("--dataset_dir", nargs="?", default="datasets", help="datasets path")
 
     parser.add_argument("--use_pretrain", type=int, default=1,
@@ -29,6 +29,8 @@ def parse_args():
 
     parser.add_argument('--laplacian_type', type=str, default='random-walk',
                         help='Specify the type of the adjacency (laplacian) matrix from {symmetric, random-walk}.')
+    # parser.add_argument('--aggregation_type', type=str, default='bi-interaction',
+    #                     help='Specify the type of the aggregation layer from {gcn, graphsage, bi-interaction}.')
     parser.add_argument("--conv_dim_list", nargs="?", default="[64,32,16]",
                         help="output size of every aggregation layer.")
     parser.add_argument("--mess_dropout", nargs="?", default="[0.1,0.1,0.1]",
@@ -40,14 +42,14 @@ def parse_args():
                         help='Lambda when calculating CF l2 loss.')
 
     parser.add_argument("--lr", type=float, default=0.0001, help="learning rate")
-    parser.add_argument("--n_epoch", type=int, default=10000, help="Maximum of epoch")
+    parser.add_argument("--n_epoch", type=int, default=1000, help="Maximum of epoch")
     parser.add_argument("--stopping_steps", type=int, default=10, help="number of epoch for early stopping")
 
     parser.add_argument('--cf_print_every', type=int, default=1,
                         help='Iter interval of printing CF loss.')
     parser.add_argument('--kg_print_every', type=int, default=1,
                         help='Iter interval of printing KG loss.')
-    parser.add_argument('--evaluate_every', type=int, default=10,
+    parser.add_argument('--evaluate_every', type=int, default=1,
                         help='Epoch interval of evaluating CF.')
 
     parser.add_argument('--Ks', nargs='?', default='[20, 40, 60, 80, 100]',
@@ -55,7 +57,7 @@ def parse_args():
 
     args = parser.parse_args()
 
-    save_dir = 'trained_model/KGNS/{}/embed-dim{}_relation-dim{}_{}_{}_lr{}_pretrain{}/'.format(
+    save_dir = 'trained_model/UIR-KG/{}/embed-dim{}_relation-dim{}_{}_{}_lr{}_pretrain{}/'.format(
         args.dataset, args.embedding_dim, args.relation_dim, args.laplacian_type,
         '-'.join([str(i) for i in eval(args.conv_dim_list)]), args.lr, args.use_pretrain)
     args.save_dir = save_dir
