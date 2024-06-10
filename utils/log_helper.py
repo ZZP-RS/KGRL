@@ -39,5 +39,3 @@ def logging_config(folder=None, name=None,
         logconsole.setFormatter(formatter)
         logging.root.addHandler(logconsole)
     return folder
-
-
