@@ -2,7 +2,7 @@ import collections
 
 cf_file = 'datasets/ml-1m/train.txt'
 kg_file = 'datasets/ml-1m/kg_final.txt'
-save_file = 'datasets/ml-1m/kg_final2.txt'
+save_file = 'datasets/ml-1m/cooccurrence.txt'
 
 nodes = collections.defaultdict(list)
 items = set()
@@ -40,6 +40,7 @@ n_relations = len(set(r))
 n_h_origin = len(h)
 print(n_h_origin)
 print(n_relations)
+coorrence_h = collections.defaultdict(list)
 item_list = list(nodes.keys())
 intersection_num = 0
 for i in range(len(item_list)):
@@ -47,15 +48,20 @@ for i in range(len(item_list)):
     for j in range(i + 1, len(item_list)):
         object_set = set(nodes[item_list[j]])
         if len(target_set.intersection(object_set)) > 3:
-            h.append(item_list[i])
-            r.append(n_relations)
-            t.append(item_list[j])
+            coorrence_h[item_list[i]].append(item_list[j])
+            coorrence_h[item_list[j]].append(item_list[i])
             intersection_num += 1
 print(intersection_num)  # 2299 15,518
 writer = open(save_file, 'w')
-assert len(h) == len(r)
-assert len(h) == len(t)
-assert len(h) == intersection_num + n_h_origin
-for i in range(len(h)):
-    writer.write('%d %d %d\n' % (h[i], r[i], t[i]))
+# assert len(h) == len(r)
+# assert len(h) == len(t)
+# assert len(h) == intersection_num + n_h_origin
+for k in coorrence_h:
+    line = "" + str(k) + " "
+    for v in coorrence_h[k]:
+        line += str(v)
+        line += " "
+    line += "\n"
+    writer.write(line)
+
 writer.close()
