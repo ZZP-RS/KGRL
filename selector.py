@@ -6,7 +6,7 @@ import math
 from tqdm import tqdm
 
 file_name = 'datasets/ml-1m/'
-save_file = file_name + 'longtail_log_350.txt'
+save_file = file_name + 'longtail2.txt'
 
 
 def load_cf(filename):
@@ -81,9 +81,10 @@ h, r, t, triples, kg_dict, entitytoitem_dict, itemtoentity_dict = load_kg(kg_fil
 
 n_entities = max(max(h), max(t)) + 1
 
-pretrain_embed_dir = 'ml-1m/selector.npz'
+pretrain_embed_dir = 'datasets/pretrain/ml-1m/selector.npz'
 pretrain_embed = np.load(pretrain_embed_dir)
 entity_user_embed = pretrain_embed['entity_user_embed']
+print(entity_user_embed.shape[0], n_users, n_items, n_users + n_items)
 assert entity_user_embed.shape[0] == (n_users + n_entities)
 
 entity_user_embed = torch.tensor(entity_user_embed)
