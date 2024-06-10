@@ -10,7 +10,7 @@ from tqdm import tqdm
 import torch.nn as nn
 import torch.optim as optim
 
-from KGNS import KGNS
+from KGRL import KGRL
 from Parser import *
 from utils.log_helper import *
 from data_loader import DataLoader
@@ -148,7 +148,7 @@ def train(args):
         user_pre_embed, item_pre_embed = None, None
 
     # construct model & optimizer                                                                                ,data.train_user_dict3 在A_in之前
-    model = KGNS(args, data.n_users, data.n_entities, data.n_relations, data.train_user_dict, data.train_user_dict2,
+    model = KGRL(args, data.n_users, data.n_entities, data.n_relations, data.train_user_dict, data.train_user_dict2, data.occ_dict,
                    data.A_in, user_pre_embed, item_pre_embed)
     if args.use_pretrain == 2:
         model = load_model(model, args.pretrain_model_path)
@@ -317,7 +317,7 @@ def train(args):
             metrics_cols.append('{}@{}'.format(m, k))
     metrics_df = pd.DataFrame(metrics_df).transpose()
     metrics_df.columns = metrics_cols
-    metrics_df.to_csv(args.save_dir + '/metrics_log2.tsv', sep='\t', index=False)
+    metrics_df.to_csv(args.save_dir + '/metrics.tsv', sep='\t', index=False)
 
     # print best metrics
     best_metrics = metrics_df.loc[metrics_df['epoch_idx'] == best_epoch].iloc[0].to_dict()
