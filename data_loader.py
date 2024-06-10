@@ -18,15 +18,17 @@ class DataLoader(object):
 
         # datasets\last-fm
         self.data_dir = os.path.join(args.dataset_dir, args.dataset)
-        self.train_dir = os.path.join(self.data_dir, 'train.txt')
+        self.train_dir = os.path.join(self.data_dir, 'longtail.txt')
         self.train_dir2 = os.path.join(self.data_dir, 'train.txt')
         self.test_dir = os.path.join(self.data_dir, 'test.txt')
         self.kg_dir = os.path.join(self.data_dir, 'kg_final2.txt')
+        self.cooccurrence_dir = os.path.join(self.data_dir, 'cooccurrence.txt')
 
         # load data. #train_data type is tulpe, len is 2
         self.cf_train_data, self.train_user_dict = self.load_cf(self.train_dir)
 
         self.cf_train_data2, self.train_user_dict2 = self.load_cf(self.train_dir2)
+        self.cooccurrence_data2, self.occ_dict = self.load_cf(self.cooccurrence_dir)
         self.cf_test_data, self.test_user_dict = self.load_cf(self.test_dir)
 
         self.train_item_dict = self._get_item_dict(self.cf_train_data2)
@@ -42,6 +44,7 @@ class DataLoader(object):
 
         # type : pandas.core.frame.DataFrame  464567 rows x 3 columns 464567
         kg_data = self.load_kg(self.kg_dir)
+
         self.construct_data(kg_data)
         self.print_info(logging)
 
@@ -240,7 +243,7 @@ class DataLoader(object):
         return torch.sparse.FloatTensor(i, v, torch.Size(shape))
 
     def generate_cf_batch(self, user_dict, user_dict2, batch_size):
-        exist_users = list(user_dict.keys())
+        exist_users = user_dict.keys()
         if batch_size <= len(exist_users):
             batch_user = random.sample(exist_users, batch_size)
         else:
