@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
+from SelfAttention import Attention_Layer
 
 
 class Aggregator(nn.Module):
@@ -14,7 +15,7 @@ class Aggregator(nn.Module):
         self.message_droupout = nn.Dropout(droupout)
         self.activation = nn.LeakyReLU()
 
-        self.selfAttention = nn.MultiheadAttention(self.input_dim, num_heads=1)
+        self.selfAttention = Attention_Layer(self.input_dim)
 
         # bi-iteraction Aggregator
         self.linear1 = nn.Linear(self.input_dim, self.output_dim)
@@ -22,23 +23,33 @@ class Aggregator(nn.Module):
         nn.init.xavier_uniform_(self.linear1.weight)
         nn.init.xavier_uniform_(self.linear2.weight)
 
-    def forward(self, ego_embeddings, A_in, train_user_dict):
+    def forward(self, ego_embeddings, A_in, train_user_dict, occ_dict):
         side_embeddings = torch.matmul(A_in, ego_embeddings)
 
-        # for key in train_user_dict.keys():
-        #     # indices = torch.Tensor(train_user_dict[key]).long().to(
-        #     #     torch.device("cuda" if torch.cuda.is_available() else "cpu"))
-        #     # neighbors_embeddings = torch.index_select(side_embeddings, dim=0, index=indices)
-        #     # neighbors_embeddings = torch.cat([side_embeddings[[key], :], neighbors_embeddings], dim=0)
-        #     indices = torch.LongTensor(train_user_dict[key]).to(torch.device("cuda"))
-        #     neighbors_embeddings = side_embeddings[indices]
-        #     user_embeddings = side_embeddings[torch.LongTensor([key]).to(torch.device("cuda"))]
-        #     neighbors_embeddings = torch.cat([user_embeddings, neighbors_embeddings], dim=0)
-        #
-        #     neighbors_embeddings, _ = self.selfAttention(neighbors_embeddings, neighbors_embeddings,
-        #                                                  neighbors_embeddings)
-        #
-        #     side_embeddings.data[key] = neighbors_embeddings[0]
+        for key in train_user_dict.keys():
+            # indices = torch.Tensor(train_user_dict[key]).long().to(
+            #     torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+            # neighbors_embeddings = torch.index_select(side_embeddings, dim=0, index=indices)
+            # neighbors_embeddings = torch.cat([side_embeddings[[key], :], neighbors_embeddings], dim=0)
+            indices = torch.LongTensor(train_user_dict[key]).to(torch.device("cuda"))
+            neighbors_embeddings = side_embeddings[indices]
+            user_embeddings = side_embeddings[torch.LongTensor([key]).to(torch.device("cuda"))]
+            neighbors_embeddings = torch.cat([user_embeddings, neighbors_embeddings], dim=0)
+
+            neighbors_embeddings = self.selfAttention(neighbors_embeddings)
+
+            side_embeddings.data[key] = neighbors_embeddings[0]
+
+        for key in occ_dict:
+            indices = torch.LongTensor(occ_dict[key]).to(torch.device("cuda"))
+            neighbors_embeddings = side_embeddings[indices]
+            user_embeddings = side_embeddings[torch.LongTensor([key]).to(torch.device("cuda"))]
+            neighbors_embeddings = torch.cat([user_embeddings, neighbors_embeddings], dim=0)
+
+            neighbors_embeddings = self.selfAttention(neighbors_embeddings)
+
+            side_embeddings.data[key] = neighbors_embeddings[0]
+
 
         sum_embeddings = self.activation(self.linear1(ego_embeddings + side_embeddings))
         bi_embeddings = self.activation(self.linear2(ego_embeddings * side_embeddings))
@@ -51,9 +62,9 @@ def _L2_loss_mean(x):
     return torch.mean(torch.sum(torch.pow(x, 2), dim=1, keepdim=False) / 2.)
 
 
-class KGNS(nn.Module):
-    def __init__(self, args, n_users, n_entities, n_relations, train_user_dict, train_user_dict2,A_in=None, user_pre_embed=None, item_pre_embed=None):
-        super(KGNS, self).__init__()
+class KGRL(nn.Module):
+    def __init__(self, args, n_users, n_entities, n_relations, train_user_dict, train_user_dict2, occurr_dict, A_in=None, user_pre_embed=None, item_pre_embed=None):
+        super(KGRL, self).__init__()
 
         self.use_pretrain = args.use_pretrain
 
@@ -62,6 +73,7 @@ class KGNS(nn.Module):
         self.n_relations = n_relations
         self.train_user_dict = train_user_dict
         self.train_user_dict2 = train_user_dict2
+        self.occurr_dict = occurr_dict
 
         self.embed_dim = args.embedding_dim  # 64
         self.relation_dim = args.relation_dim  # 64
@@ -104,7 +116,7 @@ class KGNS(nn.Module):
         ego_embeddings = self.entity_user_embed.weight
         all_embeddings = [ego_embeddings]
         for idx, layer in enumerate(self.aggregator_layers):
-            ego_embeddings = layer(ego_embeddings, self.A_in, self.train_user_dict2)
+            ego_embeddings = layer(ego_embeddings, self.A_in, self.train_user_dict2, self.occurr_dict)
             norm_embeddings = F.normalize(ego_embeddings, p=2, dim=1)
             all_embeddings.append(norm_embeddings)
 
