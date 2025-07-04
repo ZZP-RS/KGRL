@@ -29,22 +29,22 @@ python main_KGRL.py
 ```
 
 ## Datasets
-We provided three datasets to validate KGRL: MovieLens-1M, Last-FM, and Amazon-book.
+We provided three datasets to validate KGRL: MovieLens-1M, Last-FM, Amazon-book, and Yelp2018.
 
-|                | Last-FM |MovieLens-1M| Amazon-book |
-| :------------: | :-----: |  :-----:   |:-----:   |
-|    n_users     |  23566  |    6040    | 70679 |
-|    n_items     |  48123  |    3655    |24915|
-| n_interactions | 3034796 |   997579   |847733|
-|   n_entities   | 58266  |   398505   | 88572|
-|  n_relations   |    9    |     57     | 39|
-|   n_triples    | 464567  |   3396595  |2557746|
+|                | Last-FM |MovieLens-1M| Amazon-book | Yelp2018 |
+| :------------: | :-----: |  :-----:   |:-----:   |:-----:   |
+|    n_users     |  23566  |    6040    | 70679 | 45919 |
+|    n_items     |  48123  |    3655    |24915| 45538 |
+| n_interactions | 3034796 |   997579   |847733| 1185068 |
+|   n_entities   | 58266  |   398505   | 88572| 90961 |
+|  n_relations   |    9    |     57     | 39|42|
+|   n_triples    | 464567  |   3396595  |2557746| 1853704|
 
 Besides the user-item interactions, we need to construct item knowledge for each dataset. We mapped items of three datasets to Freebase entities to construct KG.
 The following table shows the KG information of three datasets:
 
-| Knowledge Graph |   Freebase(Last-FM)   |  Freebase(MovieLens-1M)  | Freebase(Amazon-book)
+| Knowledge Graph |   Freebase(Last-FM)   |  Freebase(MovieLens-1M)  | Freebase(Amazon-book) | Freebase(Yelp2018) 
 |:---------------:|          :-----------:         |     :-------:     |:-------:     |
-|   #entities    |              58266            |       398505      |88572|
-|   #relations   |                 9              |         57        |39|
-|    #triples    |              464567            |       3396595     |2557746|
+|   #entities    |              58266            |       398505      |88572|90961|
+|   #relations   |                 9              |         57        |39|42|
+|    #triples    |              464567            |       3396595     |2557746|1853704|
