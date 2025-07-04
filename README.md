@@ -40,11 +40,11 @@ We provided three datasets to validate KGRL: MovieLens-1M, Last-FM, Amazon-book,
 |  n_relations   |    9    |     57     | 39|42|
 |   n_triples    | 464567  |   3396595  |2557746| 1853704|
 
-Besides the user-item interactions, we need to construct item knowledge for each dataset. We mapped items of three datasets to Freebase entities to construct KG.
+Besides the user-item interactions, we need to construct item knowledge for each dataset. We mapped items of four datasets to Freebase entities to construct KG.
 The following table shows the KG information of three datasets:
 
 | Knowledge Graph |   Freebase(Last-FM)   |  Freebase(MovieLens-1M)  | Freebase(Amazon-book) | Freebase(Yelp2018) 
-|:---------------:|          :-----------:         |     :-------:     |:-------:     |
+|:---------------:|          :-----------:         |     :-------:     |:-------:     |:-------:     |
 |   #entities    |              58266            |       398505      |88572|90961|
 |   #relations   |                 9              |         57        |39|42|
 |    #triples    |              464567            |       3396595     |2557746|1853704|
